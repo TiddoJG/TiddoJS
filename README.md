@@ -5,9 +5,12 @@ Dit framework geeft je de optie om een slider op je pagina te zetten. Je kan doo
 ### 
 Download de files of clone de github. Pak de onderstaanden bestanden en plaats die in de map hoofd folder.
 
-####imgs/
-####comebackJS.css
-####comebackJS.js
-####comebackJSConfig.js
+```shell
+imgs/
+comebackJS.css
+comebackJS.js
+comebackJSConfig.js
+```
+
 
 
