@@ -1,77 +1,28 @@
-var Bounce = function () {
-
+var comebackslider = function () {
+    
     /**
-     * Default settings for the module
-     * @type {{selector: string, gravity: number}}
+     * Default settings voor de slider
      */
     var defaultSettings = {
-        selector: '.bounce',
-        gravity: 9.81,
-        updateSpeed: 1 //In milliseconds
+        autoplay: false,
+        updateSpeed: 500, //In milliseconds
+        sliderimg: 'sliderimg'
     };
-
-    /**
-     * The bouncing element
-     * @type {HTMLElement}
-     */
-    var element;
-
-    /**
-     * The vertical speed
-     * @type {number}
-     */
-    var speedY;
-
-    /**
-     * The timer that updates the model and the screen
-     * @type {object}
-     */
-    var timer;
-
-    /**
-     * The x and y position of the element
-     * @type {{x: number, y: number}}
-     */
-    var position = {
-        x: 0,
-        y: 0
-    };
-
-    /**
-     * Updates the x and y position to the bouncing element
-     */
-    var updateElement = function() {
-        element.style.marginLeft = position.x + 'px';
-        element.style.marginTop = position.y + 'px';
-    };
-
-    /**
-     * Moves changes the x and the y
-     * @param {number} xChange
-     * @param {number} yChange
-     */
-    var move = function(xChange, yChange) {
-
-        position.x += xChange;
-        position.y += yChange;
-
-        //If the element reaches the bottom of the parent element reverse the speed
-        if(element.parentElement.clientHeight <= position.y + element.clientHeight) {
-            speedY = -speedY;
-            console.log(speedY);
+    
+    var sliderAfbeeldingen = []; // Array waar de afbeeldingen komen wanner de init is gestart.
+    var sliderinhoud = document.getElementById(defaultSettings.sliderimg); 
+    var imgnummer = 0; // om bij te houden bij welke image je bent.
+    var i = 0; // Om mee te rekenen in de loop
+    
+    var imgchange = function() {
+        if(i > (imgnummer -1)){
+            i = 0;
         }
-
-        updateElement();
+        sliderinhoud.src = afbeeldingen[i];
+        i++; // optellen van de variable i
+        console.log(i); // Laten zien waar tie bij het tellen is in de console
     };
-
-    /**
-     * Update the variables to the new reality
-     */
-    var update = function() {
-        move(0, speedY);
-        speedY += defaultSettings.gravity * (defaultSettings.updateSpeed/1000);
-    };
-
+        // check if the user has set variables, and replace values if they are not equal to the default settings
     var mergeObjects  = function(object1, object2) {
         for (var attrname in object1) {
             if(object2.hasOwnProperty(attrname)) {
@@ -79,18 +30,52 @@ var Bounce = function () {
             }
         }
     };
-
-    /**
-     * Initializes the module
-     * @param {string} [selector] Css selector that targets the element that needs to bounce
-     * @param {object} [settings] Object that contain overrides for the default settings
-     */
-    var init = function(selector, settings) {
-        mergeObjects(defaultSettings, settings || {});
-        selector = selector || defaultSettings.selector;
-        element = document.querySelector(selector);
-        speedY = 0;
-        timer = setInterval(update, defaultSettings.updateSpeed);
+    // vorige - arrow
+    var vorige = function () {
+        console.log('vorige');
+        if(i == 0){
+            
+        }
+        else{
+            i--;
+            sliderinhoud = afbeeldingen[i];
+            console.log(i);
+        }
+    };
+    // volgende - arrow
+    var volgende = function () {
+        console.log('volgende');
+        if(i > (imgnummer -2)){
+            
+        }
+        else{
+            i++;
+            sliderinhoud.src = afbeeldingen[i];
+            console.log(i);
+        }
+    }
+    var init = function(ingesteldenAfbeeldingen, ingesteldenSettings) {
+        if(typeof ingesteldenAfbeeldingen !== 'undefined'){
+            sliderAfbeeldingen = ingesteldenAfbeeldingen;
+            imgnummer = sliderAfbeeldingen.length;
+            mergeObjects(defaultSettings, ingesteldenSettings || {});
+            
+            if(imgnummer > 0){
+                sliderinhoud.src = afbeeldingen[0];
+            }
+            else{
+                alert('Er zijn geen afbeeldingen ingesteld.')
+            }
+            
+            //arrows
+            document.getElementById("vorige").addEventListener("click", vorige);
+            document.getElementById("volgende").addEventListener("click", volgende);
+            
+            if(defaultSettings.autoplay == true){
+                timer = setInterval(imgchange, defaultSettings.updateSpeed);
+            }
+        }
+        
     };
 
     //Return the functions that should be accessible from the outside. The rest is only accessible from within the object
